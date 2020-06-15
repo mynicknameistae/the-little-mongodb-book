@@ -1,4 +1,4 @@
-# About This Book #
+# เกี่ยวกับหนังสือเล่มนี้ #
 
 ## License ##
 The Little MongoDB Book book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book.**
@@ -9,7 +9,7 @@ You can see the full text of the license at:
 
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
-## About The Author ##
+## เกี่ยวกับผู้เขียน ##
 Karl Seguin is a developer with experience across various fields and technologies. He's an expert .NET and Ruby developer.  He's a semi-active contributor to OSS projects, a technical writer and an occasional speaker. With respect to MongoDB, he was a core contributor to the C# MongoDB library NoRM, wrote the interactive tutorial [mongly](http://openmymind.net/mongly/) as well as the [Mongo Web Admin](https://github.com/karlseguin/Mongo-Web-Admin). His free service for casual game developers, [mogade.com](http://mogade.com/), is powered by MongoDB.
 
 Karl has since written [The Little Redis Book](http://openmymind.net/2012/1/23/The-Little-Redis-Book/)
@@ -24,18 +24,18 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 
 <http://github.com/karlseguin/the-little-mongodb-book>.
 
-# Introduction #
+# บทนำ #
  > It's not my fault the chapters are short, MongoDB is just easy to learn.
 
-It is often said that technology moves at a blazing pace. It's true that there is an ever growing list of new technologies and techniques being released. However, I've long been of the opinion that the fundamental technologies used by programmers move at a rather slow pace. One could spend years learning little yet remain relevant. What is striking though is the speed at which established technologies get replaced. Seemingly overnight, long-established technologies find themselves threatened by shifts in developer focus.
+มักมีคำกล่าวว่าเทคโนโลยีนั้นก้าวหน้าไปอย่างรวดเร็ว จริงอยู่ที่เทคโนโลยีและเทคนิคใหม่ต่าง ๆ ถูกเผยแพร่ออกมามากขึ้นเรื่อย ๆ อย่างไรก็ตาม โดยส่วนตัวแล้ว ผมมองว่าความก้าวหน้าของเทคโนโลยีพื้นฐานที่ถูกใช้โดยโปรแกรมเมอร์นั้นกลับก้าวหน้าไปอย่างค่อนข้างเชื่องช้า โปรแกรมเมอร์คนหนึ่งอาจใช้เวลานานนับปีเพื่อเรียนรู้ทีละนิดแต่ความรู้นั้นยังคงเป็นปัจจุบัน แต่สิ่งที่น่าตกใจคือการที่เทคโนโลยีที่ดูมั่นคงกลับถูกแทนที่อย่างรวดเร็วราวกับใช้เวลาเพียงชั่วข้ามคืน เทคโนโลยีต่าง ๆ ที่มีรากฐานมายาวนานจึงพบว่าตนเองได้รับผลกระทบจากการเปลี่ยนแปลงแนวคิดของนักพัฒนา
 
-Nothing could be more representative of this sudden shift than the progress of NoSQL technologies against well-established relational databases. It almost seems like one day the web was being driven by a few RDBMSs, and the next, five or so NoSQL solutions had established themselves as worthy solutions.
+คงไม่มีอะไรที่จะแสดงถึงการเปลี่ยนแปลงแนวคิดเช่นนี้ได้ดีกว่าความก้าวหน้าของเทคโนโลยี NoSQL ที่มีผลกระทบต่อฐานข้อมูลเชิงสัมพันธ์ที่มีรากฐานที่เข็มแข็ง ซึ่งราวกับว่าในวันหนึ่ง เว็บต่าง ๆ ถูกขับเคลื่อนโดย RDBMS เพียงไม่กี่โปรแกรม แต่ในวันต่อมา กลับมีระบบแบบ NoSQL ราวห้าชนิดที่สร้างตัวขึ้นมาเป็นทางเลือกที่คู่ควรต่อการพัฒนาเว็บ
 
-Even though these transitions seem to happen overnight, the reality is that they can take years to become accepted practice. The initial enthusiasm is driven by a relatively small set of developers and companies. Solutions are refined, lessons learned and seeing that a new technology is here to stay, others slowly try it for themselves. Again, this is particularly true in the case of NoSQL where many solutions aren't replacements for more traditional storage solutions, but rather address a specific need in addition to what one might get from traditional offerings.
+แม้ว่าการเปลี่ยนแปลงนี้ดูราวจะเกิดขึ้นในชั่วข้ามคืน แต่ในความเป็นจริง การยอมรับจนกลายเป็นแนวทางปฏิบัติอาจต้องใช้เวลานานนับปี ความกระตือรือร้นในช่วงแรกนั้นถูกขับเคลื่อนโดยนักพัฒนาและบริษัทในกลุ่มเล็ก ๆ เท่านั้น หลังจากที่แนวทางนั้น ๆ ถูกกลั่นกรองและปรับปรุงจากบทเรียนที่ได้รับจนพบว่านี่คือเทคโนโลยีใหม่ที่พร้อมจะก้าวต่อไป นักพัฒนารายอื่นก็จะเริ่มนำไปใช้อย่างช้า ๆ นี่คือความจริงที่เกิดขึ้นในกรณีของ NoSQL หลายชนิดที่ไม่ได้เกิดขึ้นเพื่อแทนที่แนวทางจัดเก็บข้อมูลแบบดั้งเดิม แต่เป็นการแก้ปัญหาตามความต้องการอันเฉพาะเจาะจงที่เพิ่มขึ้นมาจากสิ่งที่มีให้ในระบบแบบดั้งเดิม
 
-Having said all of that, the first thing we ought to do is explain what is meant by NoSQL. It's a broad term that means different things to different people. Personally, I use it very broadly to mean a system that plays a part in the storage of data. Put another way, NoSQL (again, for me), is the belief that your persistence layer isn't necessarily the responsibility of a single system. Where relational database vendors have historically tried to position their software as a one-size-fits-all solution, NoSQL leans towards smaller units of responsibility where the best tool for a given job can be leveraged. So, your NoSQL stack might still leverage a relational database, say MySQL, but it'll also contain Redis as a persistence lookup for specific parts of the system as well as Hadoop for your intensive data processing. Put simply, NoSQL is about being open and aware of alternative, existing and additional patterns and tools for managing your data.
+จากที่ได้กล่าวมาแล้วทั้งหมดนี้ เราจะมาเริ่มอธิบายถึงความหมายของ NoSQL กันเป็นอันดับแรก ซึ่งคำนี้เป็นคำที่มีความหมายกว้าง ๆ แตกต่างกันไปสำหรับบุคคลแต่ละกลุ่ม โดยส่วนตัวแล้ว ผมใช้คำนี้เพื่อสื่อถึงระบบที่ทำหน้าที่เป็นส่วนหนึ่งในการจัดเก็บข้อมูล หรืออีกนัยหนึ่ง (ย้ำอีกครั้ง ในมุมมองของผม) NoSQL คือความเชื่อว่าชั้นที่ทำหน้าที่เก็บรักษาข้อมูล (persistence layer) นั้น ไม่ได้เป็นหน้าที่ของระบบใดระบบหนึ่งเพียงอย่างเดียว ขณะที่ผู้ผลิตและจำหน่ายฐานข้อมูลเชิงสัมพันธ์ได้พยายามวางตำแหน่งซอฟต์แวร์ของตนในฐานะระบบเดียวใช้ได้ทั้งหมด (one-size-fits-all) มาโดยตลอด แต่ NoSQL จะเอนเอียงไปทางการใช้หน่วยย่อย ๆ ที่มีขนาดเล็กกว่า ในฐานะเครื่องมือที่รับผิดชอบต่องานที่กำหนด ดังนั้น ชั้นของระบบ NoSQL ของคุณอาจยังคงใช้ฐานข้อมูลเชิงสัมพันธ์เช่น MySQL แต่ใช้ Redis เป็นส่วนหนึ่งในการค้นหาข้อมูลค้าง (persistence lookup) สำหรับส่วนที่กำหนดในระบบ ตลอดจนใช้ Hadoop สำหรับการประมวลผลข้อมูลอย่างเข้มข้น กล่าวง่าย ๆ คือ NoSQL นั้นคือการเปิดกว้างและรับรู้ถึงทางเลือกอื่น ๆ ถึงแบบแผนและเครื่องมือที่สามารถนำมาใช้เพื่อจัดการข้อมูลของคุณได้
 
-You might be wondering where MongoDB fits into all of this. As a document-oriented database, MongoDB is a more generalized NoSQL solution. It should be viewed as an alternative to relational databases. Like relational databases, it too can benefit from being paired with some of the more specialized NoSQL solutions. MongoDB has advantages and drawbacks, which we'll cover in later parts of this book.
+คุณอาจกำลังสงสัยว่าแล้ว MongoDB อยู่ตรงไหนจากที่กล่าวมาท้้งหมดนี้ ในฐานะของฐานข้อมูลที่มีพื้นฐานจากเอกสาร (document-oriented) แล้ว MongoDB เป็นระบบ NoSQL ที่ถูกทำให้ใช้ได้อย่างกว้างขวาง ซึ่งสามารถมองได้ว่าเป็นทางเลือกหนึ่งจากการใช้ฐานข้อมูลเชิงสัมพันธ์ได้ แต่ MongoDB ก็สามารถได้ประโยชน์จากการนำไปใช้ร่วมกับระบบแบบ NoSQL ที่มีวัตถุประสงค์โดยเฉพาะอื่น ๆ ด้วยเช่นกัน นอกจากนี้ MongoDB ยังมีทั้งจุดเด่นและจุดด้อย ซึ่งเราจะได้กล่าวถึงกันในช่วงท้ายของหนังสือเล่มนี้
 
 # Getting Started #
 Most of this book will focus on core MongoDB functionality. We'll therefore rely on the MongoDB shell. While the shell is useful to learn as well as being a useful administrative tool, your code will use a MongoDB driver.
