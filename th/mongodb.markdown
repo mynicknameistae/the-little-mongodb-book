@@ -27,45 +27,45 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 # บทนำ #
  > It's not my fault the chapters are short, MongoDB is just easy to learn.
 
-มักมีคำกล่าวว่าเทคโนโลยีนั้นก้าวหน้าไปอย่างรวดเร็ว จริงอยู่ที่เทคโนโลยีและเทคนิคใหม่ต่าง ๆ ถูกเผยแพร่ออกมามากขึ้นเรื่อย ๆ อย่างไรก็ตาม โดยส่วนตัวแล้ว ผมมองว่าความก้าวหน้าของเทคโนโลยีพื้นฐานที่ถูกใช้โดยโปรแกรมเมอร์นั้นกลับก้าวหน้าไปอย่างค่อนข้างเชื่องช้า โปรแกรมเมอร์คนหนึ่งอาจใช้เวลานานนับปีเพื่อเรียนรู้ทีละนิดแต่ความรู้นั้นยังคงเป็นปัจจุบัน แต่สิ่งที่น่าตกใจคือการที่เทคโนโลยีที่ดูมั่นคงกลับถูกแทนที่อย่างรวดเร็วราวกับใช้เวลาเพียงชั่วข้ามคืน เทคโนโลยีต่าง ๆ ที่มีรากฐานมายาวนานจึงพบว่าตนเองได้รับผลกระทบจากการเปลี่ยนแปลงแนวคิดของนักพัฒนา
+มักมีคำกล่าวว่าเทคโนโลยีนั้นก้าวหน้าไปอย่างรวดเร็ว จริงอยู่ที่เทคโนโลยีและเทคนิคใหม่ต่าง ๆ ถูกเผยแพร่ออกมามากขึ้นเรื่อย ๆ อย่างไรก็ตาม โดยส่วนตัวแล้ว ผู้เขียนมองว่าความก้าวหน้าของเทคโนโลยีพื้นฐานที่ถูกใช้โดยโปรแกรมเมอร์นั้นกลับก้าวหน้าไปอย่างค่อนข้างเชื่องช้า โปรแกรมเมอร์คนหนึ่งอาจใช้เวลานานนับปีเพื่อเรียนรู้ทีละนิดแต่ความรู้นั้นยังคงเป็นปัจจุบัน แต่สิ่งที่น่าตกใจคือการที่เทคโนโลยีที่ดูมั่นคงกลับถูกแทนที่อย่างรวดเร็วราวกับใช้เวลาเพียงชั่วข้ามคืน เทคโนโลยีต่าง ๆ ที่มีรากฐานมายาวนานจึงพบว่าตนเองได้รับผลกระทบจากการเปลี่ยนแปลงแนวคิดของนักพัฒนา
 
 คงไม่มีอะไรที่จะแสดงถึงการเปลี่ยนแปลงแนวคิดเช่นนี้ได้ดีกว่าความก้าวหน้าของเทคโนโลยี NoSQL ที่มีผลกระทบต่อฐานข้อมูลเชิงสัมพันธ์ที่มีรากฐานที่เข็มแข็ง ซึ่งราวกับว่าในวันหนึ่ง เว็บต่าง ๆ ถูกขับเคลื่อนโดย RDBMS เพียงไม่กี่โปรแกรม แต่ในวันต่อมา กลับมีระบบแบบ NoSQL ราวห้าชนิดที่สร้างตัวขึ้นมาเป็นทางเลือกที่คู่ควรต่อการพัฒนาเว็บ
 
 แม้ว่าการเปลี่ยนแปลงนี้ดูราวจะเกิดขึ้นในชั่วข้ามคืน แต่ในความเป็นจริง การยอมรับจนกลายเป็นแนวทางปฏิบัติอาจต้องใช้เวลานานนับปี ความกระตือรือร้นในช่วงแรกนั้นถูกขับเคลื่อนโดยนักพัฒนาและบริษัทในกลุ่มเล็ก ๆ เท่านั้น หลังจากที่แนวทางนั้น ๆ ถูกกลั่นกรองและปรับปรุงจากบทเรียนที่ได้รับจนพบว่านี่คือเทคโนโลยีใหม่ที่พร้อมจะก้าวต่อไป นักพัฒนารายอื่นก็จะเริ่มนำไปใช้อย่างช้า ๆ นี่คือความจริงที่เกิดขึ้นในกรณีของ NoSQL หลายชนิดที่ไม่ได้เกิดขึ้นเพื่อแทนที่แนวทางจัดเก็บข้อมูลแบบดั้งเดิม แต่เป็นการแก้ปัญหาตามความต้องการอันเฉพาะเจาะจงที่เพิ่มขึ้นมาจากสิ่งที่มีให้ในระบบแบบดั้งเดิม
 
-จากที่ได้กล่าวมาแล้วทั้งหมดนี้ เราจะมาเริ่มอธิบายถึงความหมายของ NoSQL กันเป็นอันดับแรก ซึ่งคำนี้เป็นคำที่มีความหมายกว้าง ๆ แตกต่างกันไปสำหรับบุคคลแต่ละกลุ่ม โดยส่วนตัวแล้ว ผมใช้คำนี้เพื่อสื่อถึงระบบที่ทำหน้าที่เป็นส่วนหนึ่งในการจัดเก็บข้อมูล หรืออีกนัยหนึ่ง (ย้ำอีกครั้ง ในมุมมองของผม) NoSQL คือความเชื่อว่าชั้นที่ทำหน้าที่เก็บรักษาข้อมูล (persistence layer) นั้น ไม่ได้เป็นหน้าที่ของระบบใดระบบหนึ่งเพียงอย่างเดียว ขณะที่ผู้ผลิตและจำหน่ายฐานข้อมูลเชิงสัมพันธ์ได้พยายามวางตำแหน่งซอฟต์แวร์ของตนในฐานะระบบเดียวใช้ได้ทั้งหมด (one-size-fits-all) มาโดยตลอด แต่ NoSQL จะเอนเอียงไปทางการใช้หน่วยย่อย ๆ ที่มีขนาดเล็กกว่า ในฐานะเครื่องมือที่รับผิดชอบต่องานที่กำหนด ดังนั้น ชั้นของระบบ NoSQL ของคุณอาจยังคงใช้ฐานข้อมูลเชิงสัมพันธ์เช่น MySQL แต่ใช้ Redis เป็นส่วนหนึ่งในการค้นหาข้อมูลค้าง (persistence lookup) สำหรับส่วนที่กำหนดในระบบ ตลอดจนใช้ Hadoop สำหรับการประมวลผลข้อมูลอย่างเข้มข้น กล่าวง่าย ๆ คือ NoSQL นั้นคือการเปิดกว้างและรับรู้ถึงทางเลือกอื่น ๆ ถึงแบบแผนและเครื่องมือที่สามารถนำมาใช้เพื่อจัดการข้อมูลของคุณได้
+จากที่ได้กล่าวมาแล้วทั้งหมดนี้ เราจะมาเริ่มอธิบายถึงความหมายของ NoSQL กันเป็นอันดับแรก ซึ่งคำนี้เป็นคำที่มีความหมายกว้าง ๆ แตกต่างกันไปสำหรับบุคคลแต่ละกลุ่ม โดยส่วนตัวแล้ว ผู้เขียนใช้คำนี้เพื่อสื่อถึงระบบที่ทำหน้าที่เป็นส่วนหนึ่งในการจัดเก็บข้อมูล หรืออีกนัยหนึ่ง (ย้ำอีกครั้ง ในมุมมองของผู้เขียน) NoSQL คือความเชื่อว่าชั้นที่ทำหน้าที่เก็บรักษาข้อมูล (persistence layer) นั้น ไม่ได้เป็นหน้าที่ของระบบใดระบบหนึ่งเพียงอย่างเดียว ขณะที่ผู้ผลิตและจำหน่ายฐานข้อมูลเชิงสัมพันธ์ได้พยายามวางตำแหน่งซอฟต์แวร์ของตนในฐานะระบบเดียวใช้ได้ทั้งหมด (one-size-fits-all) มาโดยตลอด แต่ NoSQL จะเอนเอียงไปทางการใช้หน่วยย่อย ๆ ที่มีขนาดเล็กกว่า ในฐานะเครื่องมือที่รับผิดชอบต่องานที่กำหนด ดังนั้น ชั้นของระบบ NoSQL ของคุณอาจยังคงใช้ฐานข้อมูลเชิงสัมพันธ์เช่น MySQL แต่ใช้ Redis เป็นส่วนหนึ่งในการค้นหาข้อมูลค้าง (persistence lookup) สำหรับส่วนที่กำหนดในระบบ ตลอดจนใช้ Hadoop สำหรับการประมวลผลข้อมูลอย่างเข้มข้น กล่าวง่าย ๆ คือ NoSQL นั้นคือการเปิดกว้างและรับรู้ถึงทางเลือกอื่น ๆ ถึงแบบแผนและเครื่องมือที่สามารถนำมาใช้เพื่อจัดการข้อมูลของคุณได้
 
 คุณอาจกำลังสงสัยว่าแล้ว MongoDB อยู่ตรงไหนจากที่กล่าวมาท้้งหมดนี้ ในฐานะของฐานข้อมูลที่มีพื้นฐานจากเอกสาร (document-oriented) แล้ว MongoDB เป็นระบบ NoSQL ที่ถูกทำให้ใช้ได้อย่างกว้างขวาง ซึ่งสามารถมองได้ว่าเป็นทางเลือกหนึ่งจากการใช้ฐานข้อมูลเชิงสัมพันธ์ได้ แต่ MongoDB ก็สามารถได้ประโยชน์จากการนำไปใช้ร่วมกับระบบแบบ NoSQL ที่มีวัตถุประสงค์โดยเฉพาะอื่น ๆ ด้วยเช่นกัน นอกจากนี้ MongoDB ยังมีทั้งจุดเด่นและจุดด้อย ซึ่งเราจะได้กล่าวถึงกันในช่วงท้ายของหนังสือเล่มนี้
 
-# Getting Started #
-Most of this book will focus on core MongoDB functionality. We'll therefore rely on the MongoDB shell. While the shell is useful to learn as well as being a useful administrative tool, your code will use a MongoDB driver.
+# เริ่มการใช้งาน #
+เนื้อหาส่วนใหญ่ในหนังสือเล่มนี้จะเน้นไปที่ความสามารถหลัก ๆ ของ MongoDB ดังนั้นเราจะใช้เชลล์ของ MongoDB เป็นหลัก แม้ว่าเชลล์จะเป็นประโยชน์อย่างยิ่งต่อการเรียนรู้และเป็นเครื่องมือบริหารจัดการระบบที่ดี แต่ในการเขียนโค้ดนั้น เราจะใช้ไดรฟ์เวอร์ตัวใดตัวหนึ่งของ MongoDB
 
-This does bring up the first thing you should know about MongoDB: its drivers. MongoDB has a [number of official drivers](http://docs.mongodb.org/ecosystem/drivers/) for various languages. These drivers can be thought of as the various database drivers you are probably already familiar with. On top of these drivers, the development community has built more language/framework-specific libraries. For example, [NoRM](https://github.com/atheken/NoRM) is a C# library which implements LINQ, and [MongoMapper](https://github.com/jnunemaker/mongomapper) is a Ruby library which is ActiveRecord-friendly. Whether you choose to program directly against the core MongoDB drivers or some higher-level library is up to you. I point this out only because many people new to MongoDB are confused as to why there are both official drivers and community libraries - the former generally focuses on core communication/connectivity with MongoDB and the latter with more language and framework-specific implementations.
+ไดรฟ์เวอร์: จึงเป็นสิ่งแรกที่เราควรรู้จักเกี่ยวกับ MongoDB ขณะนี้ MongoDB มี[ไดรฟ์เวอร์ที่เป็นทางการ](http://docs.mongodb.org/ecosystem/drivers/)สำหรับหลากหลายภาษา ซึ่งสามารถคิดได้ว่าไดรฟ์เวอร์เหล่านี้ก็คือไดรฟ์เวอร์ฐานข้อมูลชนิดต่าง ๆ ที่ผู้อ่านคงคุ้นเคยอยู่แล้ว นอกจากไดรฟ์เวอร์เหล่านี้แล้ว ชุมชนนักพัฒนาโปรแกรมยังได้สร้างไลบรารีที่เฉพาะเจาะจงกับภาษาหรือเฟรมเวิร์กอีกด้วย ตัวอย่างเช่น [NoRM](https://github.com/atheken/NoRM) ซึ่งเป็นไลบรารีภาษา C# ที่ทำงานแบบ LINQ และ [MongoMapper](https://github.com/jnunemaker/mongomapper) ไลบรารี Ruby ที่ทำงานได้ดีกับแอคทีฟเรคคอร์ด (ActiveRecord) ผู้อ่านจะเลือกเขียนโปรแกรมโดยตรงผ่านไดรฟ์เวอร์หลักของ MongoDB หรือจะใช้ไลบรารีในชั้นที่สูงกว่าก็ได้ ผู้เขียนต้องการกล่าวถึงประเด็นนี้เนื่องจากผู้ใช้ MongoDB รายใหม่ ๆ หลายคนเกิดความสับสนว่าทำไมถึงมีทั้งไดรฟ์เวอร์ในแบบที่เป็นทางการและไลบรารีจากชุมชนนักพัฒนา - โดยทั่วไปแล้วแบบแรกนั้นจะมุ่งไปที่การเชื่อมต่อหรือการสื่อสารกับ MongoDB เป็นหลัก ขณะที่แบบหลังเป็นการจัดเตรียมการทำงานร่วมกับภาษาหรือเฟรมเวิร์กใดโดยเฉพาะ
 
-As you read through this, I encourage you to play with MongoDB to replicate what I demonstrate as well as to explore questions that you might come up with on your own. It's easy to get up and running with MongoDB, so let's take a few minutes now to set things up.
+ผู้เขียนขอแนะนำให้ทดลองเล่นกับ MongoDB และทำตามตัวอย่างที่นำเสนอไปพร้อม ๆ กันกับการอ่านหนังสือเล่มนี้ รวมถึงทดลองกับโจทย์ที่ผู้อ่านอาจเกิดความสงสัยและคิดขึ้นมาเอง การจัดเตรียมและเริ่มใช้งาน MongoDB นั้นทำได้ง่ายเพียงไม่กี่นาทีเท่านั้น ดังนั้น เรามาเริ่มติดตั้งและเตรียมใช้งานกันได้เลย
 
-1. Head over to the [official download page](http://www.mongodb.org/downloads) and grab the binaries from the first row (the recommended stable version) for your operating system of choice. For development purposes, you can pick either 32-bit or 64-bit.
+1. ไปที่[หน้าดาวน์โหลดอย่างเป็นทางการ](http://www.mongodb.org/downloads) และโหลดโปรแกรมจากแถวบนสุด (เวอร์ชันเสถียรที่แนะนำให้ใช้) สำหรับระบบปฏิบัติการที่ผู้อ่านต้องการนำไปใช้ โดยในขั้นตอนทดลองพัฒนานี้จะเลือกใชุ้ร่น 32 บิต หรือ 64 บิตก็ได้
 
-2. Extract the archive (wherever you want) and navigate to the `bin` subfolder. Don't execute anything just yet, but know that `mongod` is the server process and `mongo` is the client shell - these are the two executables we'll be spending most of our time with.
+2. คลายไฟล์บีบอัด (ไว้ที่ใดก็ได้ตามต้องการ) และไปที่โฟลเดอร์ย่อย `bin` อย่าเพิ่งรันโปรแกรมใด ๆ ตอนนี้ แต่โปรดทราบว่า `mongod` คือตัวเซอร์ฟเวอร์ และ `mongo` คือเชลล์สำหรับไคลเอนต์ - เราจะใช้เวลาส่วนใหญ่กับโปรแกรมทั้งสองนี้
 
-3. Create a new text file in the `bin` subfolder named `mongodb.config`.
+3. สร้่างไฟล์ข้อความ (text file) ขึ้นมาใหม่ในโฟลเดอร์ย่อย `bin` และตั้งชื่อว่า `mongodb.config`
 
-4. Add a single line to your mongodb.config: `dbpath=PATH_TO_WHERE_YOU_WANT_TO_STORE_YOUR_DATABASE_FILES`. For example, on Windows you might do `dbpath=c:\mongodb\data` and on Linux you might do `dbpath=/var/lib/mongodb/data`.
+4. เพิ่มบรรทัดเข้าไปในไฟล์ mongodb.config: `dbpath=เส้นทางไปยังที่จัดเก็บไฟล์ฐานข้อมูลตามต้องการ` ตัวอย่างเช่นบนวินโดวส์อาจใช้ `dbpath=c:\mongodb\data` ขณะที่บนลินุกซ์อาจกลายเป็น `dbpath=/var/lib/mongodb/data`
 
-5. Make sure the `dbpath` you specified exists.
+5. ตรวจสอบให้แน่ใจว่าเส้นทาง `dbpath` ที่ระบุได้ถูกสร้างไว้แล้ว
 
-6. Launch mongod with the `--config /path/to/your/mongodb.config` parameter.
+6. เรียกใช้ mongod ด้วยพารามิเตอร์ `--config /path/to/your/mongodb.config`
 
-As an example for Windows users, if you extracted the downloaded file to `c:\mongodb\` and you created `c:\mongodb\data\` then within `c:\mongodb\bin\mongodb.config` you would specify `dbpath=c:\mongodb\data\`. You could then launch `mongod` from a command prompt via `c:\mongodb\bin\mongod --config c:\mongodb\bin\mongodb.config`.
+ตัวอย่างสำหรับผู้ใช้วินโดวส์คือหากคลายไฟล์ที่ดาวน์โหลดมาไว้ที่ `c:\mongodb\` และได้สร้างโฟลเดอร์ `c:\mongodb\data\` ไว้ ดังนั้น ในไฟล์ `c:\mongodb\bin\mongodb.config` ก็ต้องระบุว่า `dbpath=c:\mongodb\data\` จากนั้นจึงเรียกใช้ `mongod` จากบรรทัดคำสั่งดังนี้ `c:\mongodb\bin\mongod --config c:\mongodb\bin\mongodb.config`
 
-Feel free to add the `bin` folder to your path to make all of this less verbose. MacOSX and Linux users can follow almost identical directions. The only thing you should have to change are the paths.
+ผู้อ่านอาจเพิ่มโฟลเดอร์ `bin` เข้าไปยังเส้นทาง (path) ของระบบเพื่อให้ไม่ต้องพิมพ์เส้นทางแบบเต็มเช่นนี้ก็ได้ สำหรับผู้ใช้แมคโอเอสและลินุกซ์ก็สามารถทำตามขั้นตอนนี้ได้เช่นกัน โดยเปลี่ยนเพียงเส้นทางต่าง ๆ เท่านั้น
 
-Hopefully you now have MongoDB up and running. If you get an error, read the output carefully - the server is quite good at explaining what's wrong.
+ถึงตอนนี้ MongoDB น่าจะพร้อมใช้งานแล้ว หากเกิดความผิดพลาดใด ๆ โปรดอ่านข้อความที่ถูกแสดงผลออกมาโดยละเอียด - เซอร์ฟเวอร์นั้นสามารถให้ข้อมูลเกี่ยวกับข้อผิดพลาดที่เกิดขึ้นได้เป็นอย่างดี
 
-You can now launch `mongo` (without the *d*) which will connect a shell to your running server. Try entering `db.version()` to make sure everything's working as it should. Hopefully you'll see the version number you installed.
+ผู้อ่านสามารถเรียกใช้ `mongo` (ที่ไม่มี *d*) ซึ่งจะเชื่อมต่อเชลล์ไปยังเซอร์ฟเวอร์ที่ทำงานอยู่ ลองป้อนคำสั่ง `db.version()` เพื่อให้แน่ใจว่าทุกอย่างทำงานได้อย่างที่ควรจะเป็น สิ่งที่แสดงผลออกมาควรเป็นเลขเวอร์ชันของโปรแกรมที่ถูกติดตั้งไว้
 
-# Chapter 1 - The Basics #
-We begin our journey by getting to know the basic mechanics of working with MongoDB. Obviously this is core to understanding MongoDB, but it should also help us answer higher-level questions about where MongoDB fits.
+# บทที่ 1 - หลักการพื้นฐาน #
+เรามาเริ่มการเดินทางของเราด้วยการทำความรู้จักกลไกพื้นฐานในการทำงานกับ MongoDB กันก่อน แน่นอนว่านี่คือแกนหลักสำคัญในการทำความเข้าใจ MongoDB และยังเป็นสิ่งที่จะช่วยให้เราสามารถตอบคำถามในระดับที่สูงขึ้นเกี่ยวกับความเหมาะสมในการใช้ MongoDB ได้อีกด้วย
 
 To get started, there are six simple concepts we need to understand.
 
