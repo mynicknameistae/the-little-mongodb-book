@@ -25,7 +25,7 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 <http://github.com/karlseguin/the-little-mongodb-book>.
 
 # บทนำ #
- > It's not my fault the chapters are short, MongoDB is just easy to learn.
+ > นี่ไม่ใช่ความผิดของผู้เขียนที่แต่ละบทนั้นแสนสั้น แต่การเรียนรู้ MongoDB นั้นง่ายจริง ๆ
 
 มักมีคำกล่าวว่าเทคโนโลยีนั้นก้าวหน้าไปอย่างรวดเร็ว จริงอยู่ที่เทคโนโลยีและเทคนิคใหม่ต่าง ๆ ถูกเผยแพร่ออกมามากขึ้นเรื่อย ๆ อย่างไรก็ตาม โดยส่วนตัวแล้ว ผู้เขียนมองว่าความก้าวหน้าของเทคโนโลยีพื้นฐานที่ถูกใช้โดยโปรแกรมเมอร์นั้นกลับก้าวหน้าไปอย่างค่อนข้างเชื่องช้า โปรแกรมเมอร์คนหนึ่งอาจใช้เวลานานนับปีเพื่อเรียนรู้ทีละนิดแต่ความรู้นั้นยังคงเป็นปัจจุบัน แต่สิ่งที่น่าตกใจคือการที่เทคโนโลยีที่ดูมั่นคงกลับถูกแทนที่อย่างรวดเร็วราวกับใช้เวลาเพียงชั่วข้ามคืน เทคโนโลยีต่าง ๆ ที่มีรากฐานมายาวนานจึงพบว่าตนเองได้รับผลกระทบจากการเปลี่ยนแปลงแนวคิดของนักพัฒนา
 
@@ -67,57 +67,57 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 # บทที่ 1 - หลักการพื้นฐาน #
 เรามาเริ่มการเดินทางของเราด้วยการทำความรู้จักกลไกพื้นฐานในการทำงานกับ MongoDB กันก่อน แน่นอนว่านี่คือแกนหลักสำคัญในการทำความเข้าใจ MongoDB และยังเป็นสิ่งที่จะช่วยให้เราสามารถตอบคำถามในระดับที่สูงขึ้นเกี่ยวกับความเหมาะสมในการใช้ MongoDB ได้อีกด้วย
 
-To get started, there are six simple concepts we need to understand.
+มีหลักการพื้นฐานหกประการที่ควรทำความเข้าใจก่อนเริ่มใช้งานดังนี้
 
-1. MongoDB has the same concept of a `database` with which you are likely already familiar (or a schema for you Oracle folks).  Within a MongoDB instance you can have zero or more databases, each acting as high-level containers for everything else.
+1. MongoDB ใช้หลักการของ `ฐานข้อมูล (database)` ที่เราน่าจะคุ้นเคยกันดีอยู่แล้ว (หรือสคีมาสำหรับสายออราเคิล) ในระบบ MongoDB หนึ่ง ๆ สามารถมีฐานข้อมูลได้ตั้งแต่จำนวนศูนย์ฐานข้อมูลหรือมากกว่า แต่ละฐานข้อมูลทำหน้าที่เป็นที่จัดเก็บ (container) องค์ประกอบต่าง ๆ ทั้งหมดที่อยู่ภายใน 
 
-2. A database can have zero or more `collections`. A collection shares enough in common with a traditional `table` that you can safely think of the two as the same thing.
+2. ฐานข้อมูลหนึ่งสามารถมี `คอลเลกชัน (collection)` จำนวนศูนย์คอลเลกชันหรือมากกว่า ในคอลเลกชันหนึ่ง ๆ มีคุณสมบัติคล้ายกันกับ `ตาราง (table)` ทั่วไป จนสามารถคิดได้ว่าทั้งสองสิ่งนี้คือสิ่งเดียวกัน
 
-3. Collections are made up of zero or more `documents`. Again, a document can safely be thought of as a `row`.
+3. คอลเลกชันต่าง ๆ ถูกสร้างขึ้นมาจาก `เอกสาร (document)` จำนวนศูนย์เอกสารหรือมากกว่า และเช่นเดียวกัน เอกสารหนึ่ง ๆ ก็สามารถคิดได้ว่าคือ `แถว (row)` นั่นเอง
 
-4. A document is made up of one or more `fields`, which you can probably guess are a lot like `columns`.
+4. เอกสารหนึ่ง ๆ ถูกสร้างขึ้นมาจาก `ฟิลด์ (field)` จำนวนหนึ่งฟิลด์หรือมากกว่า ซึ่งผู้อ่านคงเดาได้ว่ามีลักษณะคล้ายกันกับ `คอลัมน์ (column)`
 
-5. `Indexes` in MongoDB function mostly like their RDBMS counterparts.
+5. `ดัชนี (index)` ใน MongoDB ทำหน้าที่โดยรวมเช่นเดียวกันกับในระบบแบบ RDBMS
 
-6. `Cursors` are different than the other five concepts but they are important enough, and often overlooked, that I think they are worthy of their own discussion.  The important thing to understand about cursors is that when you ask MongoDB for data, it returns a pointer to the result set called a cursor, which we can do things to, such as counting or skipping ahead, before actually pulling down data.
+6. `เคอร์เซอร์ (cursor)` มีลักษณะที่แตกต่างจากหลักการห้าด้านข้างต้น มีความสำคัญไม่แพ้กันแต่มักถูกมองข้าม ซึ่งผู้เขียนมองว่าควรได้รับการพิจารณาเป็นการเฉพาะ สิ่งสำคัญที่ต้องทำความเข้าใจเกี่ยวกับเคอร์เซอร์คือในขณะร้องขอข้อมูลจาก MongoDB นั้น สิ่งที่ถูกส่งกลับมาคือตัวชี้ที่ถูกเรียกว่าเคอร์เซอร์ซึ่งไปยังชุดของผลลัพธ์ที่เราสามารถดำเนินการต่าง ๆ ได้ เช่นการนับจำนวนหรือข้ามไปข้างหน้า ก่อนที่จะมีการดึงข้อมูลออกมาจริง ๆ 
 
-To recap, MongoDB is made up of `databases` which contain `collections`. A `collection` is made up of `documents`. Each `document` is made up of `fields`. `Collections` can be `indexed`, which improves lookup and sorting performance. Finally, when we get data from MongoDB we do so through a `cursor` whose actual execution is delayed until necessary.
+มาทบทวนกันอีกครั้ง MongoDB ถูกสร้างขึ้นมาจาก `ฐานข้อมูล` ที่ประกอบไปด้วย `คอลเลกชัน` โดยหนึ่ง `คอลเลกชัน` ถูกสร้างขึ้นมาจาก `เอกสาร` และแต่ละ `เอกสาร` ประกอบไปด้วย `ฟิลด์` ต่าง ๆ ในที่นี้ `คอลเลกชัน` สามารถถูกทำ `ดัชนี` ซึ่งช่วยเพิ่มประสิทธิภาพในการสืบค้นและจัดเรียงข้อมูล และท้ายที่สุด ในการนำข้อมูลจาก MongoDB มาใช้นั้น จะกระทำผ่าน `เคอร์เซอร์` ซึ่งการประมวลผลจริง ๆ จะถูกชะลอออกไปจนกว่าจะถึงเวลาที่จำเป็น
 
-Why use new terminology (collection vs. table, document vs. row and field vs. column)? Is it just to make things more complicated? The truth is that while these concepts are similar to their relational database counterparts, they are not identical. The core difference comes from the fact that relational databases define `columns` at the `table` level whereas a document-oriented database defines its `fields` at the `document` level. That is to say that each `document` within a `collection` can have its own unique set of `fields`.  As such, a `collection` is a dumbed down container in comparison to a `table`, while a `document` has a lot more information than a `row`.
+ทำไมต้องกำหนดคำศัพท์ขึ้นมาใหม่ (คอลเลกชัน vs. ตาราง เอกสาร vs. แถว และฟิลด์ vs. คอลัมน์)? หรือเพียงแค่ต้องการเพิ่มความซับซ้อนเท่านั้น? ในความเป็นจริง แม้ว่าหลักการพื้นฐานเหล่านี้ดูจะคล้ายคลึงกับองค์ประกอบต่าง ๆ ในฐานข้อมูลเชิงสัมพันธ์ แต่ก็ไม่ได้เหมือนกันทั้งหมด ความแตกต่างหลัก ๆ มาจากข้อเท็จจริงที่ว่าฐานข้อมูลเชิงสัมพันธ์กำหนด `คอลัมพน์` ที่ระดับ `ตาราง` ขณะที่ฐานข้อมูลที่ใช้รูปแบบเอกสารกำหนด `ฟิลด์` ที่ระดับ `เอกสาร` จึงกล่าวได้ว่าแต่ละ `เอกสาร` ใน `คอลเลกชัน` หนึ่ง ๆ สามารถมีชุดของ `ฟิลด์` ที่เฉพาะเจาะจงในเอกสารนั้น ๆ ได้ ดังนั้น `คอลเลกชัน` จึงเป็นที่จัดเก็บข้อมูลที่ดูจะฉลาดน้อยกว่าเมื่อเปรียบเทียบกับ `ตาราง` ขณะที่ `เอกสาร` หนึ่ง ๆ นั้น มีข้อมูลและสารสนเทศได้มากกว่าที่จัดเก็บได้ในหนึ่ง `แถว` มาก
 
-Although this is important to understand, don't worry if things aren't yet clear. It won't take more than a couple of inserts to see what this truly means. Ultimately, the point is that a collection isn't strict about what goes in it (it's schema-less). Fields are tracked with each individual document. The benefits and drawbacks of this will be explored in a future chapter.
+แม้ว่านี่คือสิ่งสำคัญที่ต้องทำความเข้าใจ แต่อย่าเพิ่งเป็นกังวลไปหากยังเห็นภาพไม่ชัดเจนนัก หลังจากลองเพิ่มข้อมูลสักสองถึงสามครั้งก็จะเข้าใจความหมายได้เอง ในที่สุดแล้ว ประเด็นสำคัญก็คือในคอลเลกชันหนึ่ง ๆ นั้นไม่ได้มีกฎเกณฑ์ที่ตายตัวว่าจะใส่อะไรเข้าไปได้บ้าง (นั่นคือไม่มีสคีมา) ฟิลด์ต่าง ๆ ถูกติดตามไว้โดยตรงในแต่ละเอกสาร ซึ่งจุดเด่นและจุดด้อยของลักษณะเช่นนี้จะถูกกล่าวถึงในบทต่อ ๆ ไป
 
-Let's get hands-on. If you don't have it running already, go ahead and start the `mongod` server as well as a mongo shell. The shell runs JavaScript. There are some global commands you can execute, like `help` or `exit`. Commands that you execute against the current database are executed against the `db` object, such as `db.help()` or `db.stats()`. Commands that you execute against a specific collection, which is what we'll be doing a lot of, are executed against the `db.COLLECTION_NAME` object, such as `db.unicorns.help()` or `db.unicorns.count()`.
+มาเริ่มลงมือกันดีกว่า ถ้าเซอร์ฟเวอร์ยังไม่ได้ทำงานอยู่ ให้เรียกใช้ `mongod` รวมทั้งเชลล์ mongo ได้เลย ซึ่งเชลล์นี้จะรันจาวาสคริปต์ มีหลายคำสั่งที่สามารถเรียกใช้ได้เลยโดยไม่ขึ้นกับฐานข้อมูล เช่น `help` หรือ `exit` ส่วนคำสั่งที่ต้องการใช้กับฐานข้อมูลปัจจุบันจะถูกประมวลผลผ่านออบเจกต์ `db` เช่น `db.help()` หรือ `db.stats()` ขณะที่คำสั่งต่าง ๆ ที่จะประมวลผลกับคอลเลกชันใด ๆ ซึ่งเราจะได้ใช้เป็นหลักในลำดับต่อไปนั้น จะถูกประมวลผลผ่านออบเจกต์ `db.ชื่อคอลเลกชัน` เช่น `db.unicorns.help()` หรือ `db.unicorns.count()`
 
-Go ahead and enter `db.help()`, you'll get a list of commands that you can execute against the `db` object.
+ลองสั่ง `db.help()` ดู โปรแกรมจะแสดงรายการของคำสั่งที่สามารถใช้ประมวลผลออบเจกต์ `db` ได้
 
-A small side note: Because this is a JavaScript shell, if you execute a method and omit the parentheses `()`, you'll see the method body rather than executing the method. I only mention it so that the first time you do it and get a response that starts with `function (...){` you won't be surprised. For example, if you enter `db.help` (without the parentheses), you'll see the internal implementation of the `help` method.
+หมายเหตุเล็ก ๆ: เนื่องจากนี่คือเชลล์จาวาสคริปต์ หากคุณสั่งรันเมธอดโดยไม่ใส่วงเล็บ `()` คุณจะพบกับตัวโปรแกรมของเมธอดแทนที่จะเป็นการรันเมธอดนั้น ผู้เขียนขอกล่าวถึงไว้ ณ ที่นี้เพื่อผู้อ่านจะได้ไม่แปลกใจหากป้อนคำสั่งแล้วกลับพบหน้าจอที่ขึ้นต้นว่า `function (...){` ตัวอย่างเช่นหากป้อน `db.help` (โดยไม่มีวงเล็บ) โปรแกรมจะแสดงรายละเอียดของเมธอด `help` ขึ้นมาแทน
 
-First we'll use the global `use` helper to switch databases, so go ahead and enter `use learn`. It doesn't matter that the database doesn't really exist yet. The first collection that we create will also create the actual `learn` database. Now that you are inside a database, you can start issuing database commands, like `db.getCollectionNames()`. If you do so, you should get an empty array (`[ ]`). Since collections are schema-less, we don't explicitly need to create them. We can simply insert a document into a new collection. To do so, use the `insert` command, supplying it with the document to insert:
+อันดับแรก เราจะใช้คำสั่ง `use` เป็นตัวช่วยสลับฐานข้อมูล ลองป้อน `use learn` ได้เลย ไม่ต้องกังวลว่าเรายังไม่มีฐานข้อมูลนี้อยู่จริง เนื่องจากหลังจากเราสร้างคอลเลกชันแรกขึ้นมาแล้ว ฐานข้อมูล `learn` ก็จะถูกสร้างขึ้นเช่นกัน เมื่อเราอยู่ในฐานข้อมูลแล้ว ก็สามารถเริ่มป้อนคำสั่งเกี่ยวกับฐานข้อมูล เช่น `db.getCollectionNames()` ได้ ถ้าลองสั่งดู คุณควรพบกับอาร์เรย์ว่าง (`[ ]`) และเนื่องจากคอลเลกชันนั้นเป็นแบบไม่มีสคีมา เราจึงไม่จำเป็นต้องสร้างขึ้นมา โดยต้องทำเพียงแค่เพิ่มเอกสารเข้าไปยังคอลเลกชันใหม่นี้เท่านั้น ซึ่งสามารถทำได้โดยใช้คำสั่ง `insert` ตามด้วยเอกสารที่ต้องการเพิ่มเข้าไป:
 
 	db.unicorns.insert({name: 'Aurora',
 		gender: 'f', weight: 450})
 
-The above line is executing `insert` against the `unicorns` collection, passing it a single parameter. Internally MongoDB uses a binary serialized JSON format called BSON. Externally, this means that we use JSON a lot, as is the case with our parameters. If we execute `db.getCollectionNames()` now, we'll see a `unicorns` collection.
+บรรทัดข้างต้น คือการส่งค่าพารามิเตอร์ผ่านคำสั่ง `insert` เข้าไปยังคอลเลกชัน `unicorns` การทำงานภายในของ MongoDB นั้น ใช้รูปแบบ JSON ทีเ่ป็นอนุกรมไบนารีซื่อมีชื่อเรียกว่า BSON ดังนั้นในการทำงานภายนอกนี้ เราจะใช้ JSON เป็นหลัก ดังเช่นพารามิเตอร์ที่ส่งผ่านไปนี้ หากเราสั่ง `db.getCollectionNames()` ในตอนนี้ เราจะพบกับคอลเลกชัน `unicorns`
 
-You can now use the `find` command against `unicorns` to return a list of documents:
+เราสามารถใช้คำสั่ง `find` กับ `unicorns` เพื่อคืนค่าเป็นรายการเอกสารได้:
 
 	db.unicorns.find()
 
-Notice that, in addition to the data you specified, there's an `_id` field. Every document must have a unique `_id` field. You can either generate one yourself or let MongoDB generate a value for you which has the type `ObjectId`. Most of the time you'll probably want to let MongoDB generate it for you. By default, the `_id` field is indexed. You can verify this through the  `getIndexes` command:
+สังเกตว่านอกเหนือจากข้อมูลที่เราป้อนเข้าไปแล้ว จะมีฟิลด์ `_id` เพิ่มขึ้นมา ในทุกเอกสารจะต้องมีฟิลด์ `_id` ที่มีค่าไม่ซ้ำกัน เราสามารถสร้างขึ้นมาได้เองหรือจะให้ MongoDB กำหนดค่าขึ้นมาให้ก็ได้โดยจะมีชนิดของฟิลด์เป็น `ObjectId` โดยส่วนใหญ่แล้วเราจะให้ MongoDB กำหนดค่าให้เอง ซึ่งฟิลด์ `_id` นี้จะถูกทำดัชนีให้โดยปริยาย ซึ่งเราสามารถตรวจสอบได้ด้วยคำสั่ง  `getIndexes`:
 
 	db.unicorns.getIndexes()
 
-What you're seeing is the name of the index, the database and collection it was created against and the fields included in the index.
+เราจะพบกับชื่อของดัชนี ชื่อฐานข้อมูลและคอลเลกชันที่ดัชนีนี้ถูกนำมาใช้ และรายการของฟิลด์ต่าง ๆ ที่รวมอยู่ในดัชนี
 
-Now, back to our discussion about schema-less collections. Insert a totally different document into `unicorns`, such as:
+ตอนนี้เราจะกลับมากล่าวถึงการไม่มีสคีมาในคอลเลกชันกันอีกครั้ง ลองเพิ่มเอกสารที่แตกต่างกันโดยสิ้นเชิงเข้าไปใน `unicorns` ดังนี้:
 
 	db.unicorns.insert({name: 'Leto',
 		gender: 'm',
 		home: 'Arrakeen',
 		worm: false})
 
-And, again use `find` to list the documents. Once we know a bit more, we'll discuss this interesting behavior of MongoDB, but hopefully you are starting to understand why the more traditional terminology wasn't a good fit.
+จากนั้นใช้ `find` อีกครั้งเพื่อแสดงรายการเอกสาร เราจะกลับมาอธิบายถึงพฤติกรรมที่น่าสนใจเช่นนี้ของ MongoDB อีกครั้งหลังจากเราได้เรียนรู้เพิ่มเติมอีกสักนิด แต่ในตอนนี้ ผู้อ่านคงเริ่มเข้าใจว่าทำไมชื่อเรียกต่าง ๆ ที่ใช้ในฐานข้อมูลทั่วไปจึงไม่เหมาะกับการนำมาใช้ในที่นี้
 
 ## Mastering Selectors ##
 In addition to the six concepts we've explored, there's one practical aspect of MongoDB you need to have a good grasp of before moving to more advanced topics: query selectors. A MongoDB query selector is like the `where` clause of an SQL statement. As such, you use it when finding, counting, updating and removing documents from collections. A selector is a JSON object, the simplest of which is `{}` which matches all documents. If we wanted to find all female unicorns, we could use `{gender:'f'}`.
