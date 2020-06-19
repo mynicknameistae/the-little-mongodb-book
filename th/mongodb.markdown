@@ -117,12 +117,12 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 		home: 'Arrakeen',
 		worm: false})
 
-จากนั้นใช้ `find` อีกครั้งเพื่อแสดงรายการเอกสาร เราจะกลับมาอธิบายถึงพฤติกรรมที่น่าสนใจเช่นนี้ของ MongoDB อีกครั้งหลังจากเราได้เรียนรู้เพิ่มเติมอีกสักนิด แต่ในตอนนี้ ผู้อ่านคงเริ่มเข้าใจว่าทำไมชื่อเรียกต่าง ๆ ที่ใช้ในฐานข้อมูลทั่วไปจึงไม่เหมาะกับการนำมาใช้ในที่นี้
+จากนั้นใช้ `find` อีกครั้งเพื่อแสดงรายการเอกสาร เราจะกลับมาอธิบายถึงพฤติกรรมที่น่าสนใจเช่นนี้ของ MongoDB อีกครั้งหลังจากเราได้เรียนรู้เพิ่มเติมอีกสักนิด แต่ในตอนนี้ ผู้อ่านคงเริ่มเข้าใจว่าทำไมชื่อเรียกต่าง ๆ ที่ใช้ในฐานข้อมูลแบบดั้งเดิมจึงไม่เหมาะกับการนำมาใช้ในที่นี้
 
-## Mastering Selectors ##
-In addition to the six concepts we've explored, there's one practical aspect of MongoDB you need to have a good grasp of before moving to more advanced topics: query selectors. A MongoDB query selector is like the `where` clause of an SQL statement. As such, you use it when finding, counting, updating and removing documents from collections. A selector is a JSON object, the simplest of which is `{}` which matches all documents. If we wanted to find all female unicorns, we could use `{gender:'f'}`.
+## รู้จักกับตัวช่วยเลือก (Selector) ##
+นอกจากหลักสำคัญหกประการที่เราได้ศึกษากันไปแล้ว ยังมีประเด็นเกี่ยวกับตัวช่วยเลือกคิวรี (query selector) ที่จำเป็นต้องทำความเข้าใจการนำมาใช้กับ MongoDB ก่อนที่เราจะก้าวไปยังหัวข้อขั้นสูงขึ้นต่อไปได้ ตัวช่วยเลือกคิวรีของ MongoDB ทำหน้าที่คล้ายกับประโยค `where` ในข้อความสั่ง SQL ดังนั้น เราจึงนำมาใช้ในการดำเนินการค้นหา นับจำนวน ปรับปรุงแก้ไข และลบเอกสารต่าง ๆ ที่อยู่ในแต่ละคอลเลกชัน ตัวช่วยเลือกแต่ละตัวเป็นออบเจกต์ JSON ซึ่งในรูปแบบพื้นฐานที่สุดหรือ `{}` นั้น จะจับคู่ได้กับเอกสารทั้งหมด หรือถ้าเราต้องการค้นหายูนิคอร์นเพศเมีย (female unicorn) ทั้งหมด เราสามารถใช้ `{gender:'f'}` เป็นตัวช่วยเลือกได้
 
-Before delving too deeply into selectors, let's set up some data to play with. First, remove what we've put so far in the `unicorns` collection via: `db.unicorns.remove({})`. Now, issue the following inserts to get some data we can play with (I suggest you copy and paste this):
+ก่อนจะลงรายละเอียดกับตัวช่วยเลือกไปมากกว่านี้ เราต้องเตรียมข้อมูลเพิ่มเติมให้สามารถเห็นภาพได้ชัดเจนขึ้นเสียก่อน อันดับแรก เราจะลบข้อมูลต่าง ๆ ที่ป้อนไว้แล้วในคอลเลกชัน `unicorns` ด้วยคำสั่ง: `db.unicorns.remove({})` จากนั้น ให้ป้อนข้อมูลลงไปดังนี้ (แนะนำให้ผู้อ่านคัดลอกไปรันได้เลย):
 
 	db.unicorns.insert({name: 'Horny',
 		dob: new Date(1992,2,13,7,47),
@@ -197,49 +197,49 @@ Before delving too deeply into selectors, let's set up some data to play with. F
 		gender: 'm',
 		vampires: 165});
 
-Now that we have data, we can master selectors. `{field: value}` is used to find any documents where `field` is equal to `value`. `{field1: value1, field2: value2}` is how we do an `and` statement. The special `$lt`, `$lte`, `$gt`, `$gte` and `$ne` are used for less than, less than or equal, greater than, greater than or equal and not equal operations. For example, to get all male unicorns that weigh more than 700 pounds, we could do:
+เมื่อเรามีข้อมูลแล้ว เราก็สามารถใช้ตัวช่วยเลือกได้หลากหลายขึ้น ในที่นี้ `{field: value}` ถูกใช้เพื่อค้นหาเอกสารใด ๆ ที่ `field` มีค่าตรงกับ `value` และ `{field1: value1, field2: value2}` แสดงตัวอย่างการใช้ `และ (and)` ในการค้นหา เราสามารถใช้ `$lt` `$lte` `$gt` `$gte` และ `$ne` เป็นตัวดำเนินการเพื่อเปรียบเทียบแบบน้อยกว่า น้อยกว่าหรือเท่ากับ มากกว่า มากกว่าหรือเท่ากับ และไม่เท่ากับ ได้ตามลำดับ ตัวอย่างเช่น หากต้องการค้นหายูนิคอร์นเพศผู้ที่มีน้ำหนักมากกว่า 700 ปอนด์ ก็สามารถทำได้ด้วย:
 
 	db.unicorns.find({gender: 'm',
 		weight: {$gt: 700}})
-	//or (not quite the same thing, but for
-	//demonstration purposes)
+	//หรือ (แม้จะมีความหมายต่างกัน 
+	//แต่สามารถแสดงตัวอย่างโดยได้ผลเช่นเดียวกัน)
 	db.unicorns.find({gender: {$ne: 'f'},
 		weight: {$gte: 701}})
 
 
-The `$exists` operator is used for matching the presence or absence of a field, for example:
+เราสามารถใช้ตัวดำเนินการ `$exists` เพื่อตรวจจับว่ามีฟิลด์นั้น ๆ อยู่หรือไม่ ตัวอย่างเช่น:
 
 	db.unicorns.find({
 		vampires: {$exists: false}})
 
-should return a single document. The '$in' operator is used for matching one of several values that we pass as an array, for example:
+ควรแสดงผลเอกสารเพียงหนึ่งรายการ ขณะที่ตัวดำเนินการ '$in' ถูกใช้เพื่อตรวจจับว่ามีค่าตรงกับหนึ่งในรายการของอาร์เรย์ที่เราป้อนเข้าไปหรือไม่ เช่น:
 
     db.unicorns.find({
     	loves: {$in:['apple','orange']}})
 
-This returns any unicorn who loves 'apple' or 'orange'.
+ซึ่งจะแสดงยูนิคอร์นทุกรายการที่มีข้อมูลว่าชอบ 'apple' หรือ 'orange'
 
-If we want to OR rather than AND several conditions on different fields, we use the `$or` operator and assign to it an array of selectors we want or'd:
+หากเราต้องการนำหลาย ๆ เงื่อนไขในฟิลด์ที่แตกต่างกันมาทำการหรือ (OR) แทนการและ (AND) นั้น ก็สามารถทำได้โดยใช้ตัวดำเนินการ `$or` แล้วกำหนดอาร์เรย์ของตัวช่วยค้นหารายการต่าง ๆ ที่ต้องการนำมา หรือ (OR) เข้าด้วยกัน:
 
 	db.unicorns.find({gender: 'f',
 		$or: [{loves: 'apple'},
 			  {weight: {$lt: 500}}]})
 
-The above will return all female unicorns which either love apples or weigh less than 500 pounds.
+ตัวอย่างข้างต้นจะแสดงรายการยูนิคอร์นเพศเมียทั้งหมดที่ชอบแอปเปิลหรือมีน้ำหนักน้อยกว่า 500 ปอนด์
 
-There's something pretty neat going on in our last two examples. You might have already noticed, but the `loves` field is an array. MongoDB supports arrays as first class objects. This is an incredibly handy feature. Once you start using it, you wonder how you ever lived without it. What's more interesting is how easy selecting based on an array value is: `{loves: 'watermelon'}` will return any document where `watermelon` is a value of `loves`.
+มีบางอย่างน่าสนใจเกิดขึ้นในตัวอย่างล่าสุดทั้งสองของเรานี้ ผู้อ่านอาจสังเกตเห็นแล้วว่าฟิลด์ `loves` นั้นเป็นอาร์เรย์ เนื่องจาก MongoDB รองรับอาร์เรย์เป็นออบเจกต์พื้นฐาน ซึ่งนี่เป็นคุณสมบัติที่มีประโยชน์เป็นอย่างยิ่งจนหลังจากเริ่มใช้แล้ว อาจทำให้รู้สึกว่าอยู่มาได้อย่างไรโดยไม่ได้ใช้คุณสมบัตินี้ สิ่งที่น่าสนใจยิ่งขึ้นไปอีกคือความง่ายในการเลือกด้วยการอ้างถึงข้อมูลที่อยู่ในอาร์เรย์ เช่นการเลือกด้วย: `{loves: 'watermelon'}` ก็จะแสดงเอกสารทุกรายการที่มี `watermelon` เป็นค่าหนึ่งที่อยู่ใน `loves`
 
-There are more available operators than what we've seen so far. These are all described in the [Query Selectors](http://docs.mongodb.org/manual/reference/operator/query/#query-selectors) section of the MongoDB manual. What we've covered so far though is the basics you'll need to get started. It's also what you'll end up using most of the time.
+ยังมีตัวดำเนินการอื่นให้ใช้อีกมาก นอกเหนือจากตัวดำเนินการที่กล่าวถึงไว้ในที่นี้ ซึ่งทั้งหมดนั้นจะถูกกล่าวถึงโดยละเอียดในส่วนของ [ตัวช่วยเลือกคิวรี (Query Selectors)](http://docs.mongodb.org/manual/reference/operator/query/#query-selectors) ในคู่มือ MongoDB อย่างไรก็ตาม ตัวดำเนินการต่าง ๆ ที่ได้ครอบคลุมมาถึงขณะนี้นั้นก็เพียงพอต่อการเริ่มใช้งานแล้ว และโดยส่วนใหญ่เราก็มักใช้เพียงตัวดำเนินการพื้นฐานเหล่านี้เป็นหลัก
 
-We've seen how these selectors can be used with the `find` command. They can also be used with the `remove` command which we've briefly looked at, the `count` command, which we haven't looked at but you can probably figure out, and the `update` command which we'll spend more time with later on.
+เราได้เห็นวิธีการนำตัวช่วยเลือกมาใช้ร่วมกันคำสั่ง `find` กันแล้ว ตัวช่วยเหลือกเหล่านี้ยังสามารถถูกใช้ร่วมกับคำสั่ง `remove` เพื่อลบข้อมูลดังที่ได้เห็นเบื้องต้นมาแล้วได้เช่นกัน และสามารถนำมาใช้กับคำสั่ง `count` ที่ยังไม่ได้ลองใช้กันแต่ผู้อ่านก็น่าจะพอเห็นภาพได้ ตลอดจนคำสั่ง `update` ที่เราจะมาใช้เวลาเพิ่มเติมเพื่อทดลองใช้กันต่อไป
 
-The `ObjectId` which MongoDB generated for our `_id` field can be selected like so:
+ในส่วนของ `ObjectId` ที่ MongoDB สร้างขึ้นมาให้กับฟิลด์ `_id` ของเราก็สามารถถูกเลือกได้เช่นกัน:
 
 	db.unicorns.find(
-		{_id: ObjectId("TheObjectId")})
+		{_id: ObjectId("ค่าของ ObjectId")})
 
-## In This Chapter ##
-We haven't looked at the `update` command yet, or some of the fancier things we can do with `find`. However, we did get MongoDB up and running, looked briefly at the `insert` and `remove` commands (there isn't much more than what we've seen). We also introduced `find` and saw what MongoDB `selectors` were all about. We've had a good start and laid a solid foundation for things to come. Believe it or not, you actually know most of what you need to know to get started with MongoDB - it really is meant to be quick to learn and easy to use. I strongly urge you to play with your local copy before moving on. Insert different documents, possibly in new collections, and get familiar with different selectors. Use `find`, `count` and `remove`. After a few tries on your own, things that might have seemed awkward at first will hopefully fall into place.
+## ในบทนี้ ##
+แม้ว่าเรายังไม่ได้ดูรายละเอียดเกี่ยวกับคำสั่ง `update` หรือความสามารถเด่น ๆ ที่เราสามารถทำได้ด้วย `find` อย่างไรก็ตาม เราได้เริ่มใช้งาน MongoDB ได้ลองใช้คำสั่ง `insert` และ `remove` เพื่อเพิ่มและลบข้อมูล (ซึ่งไม่ได้มีอะไรมากไปกว่าที่เราได้ลองใช้ไปแล้วนัก) เราได้เริ่มใช้ `find` เพื่อค้นหาข้อมูล และได้รู้ว่า `ตัวช่วยเลือก (selectors)` ของ MongoDB นั้นคืออะไร ในตอนนี้ เราได้วางรากฐานสำหรับสิ่งต่าง ๆ ที่จะเรียนรู้กันต่อไปได้อย่างเข้มแข็ง เชื่อหรือไม่ว่าขณะนี้ผู้อ่านได้เรียนรู้ส่วนใหญ่ของสิ่งที่จำเป็นต่อการเริ่มใช้ MongoDB ไปเรียบร้อยแล้ว - นั่นเป็นเพราะ MongoDB ถูกสร้างให้ง่ายต่อการเรียนรู้และใช้งาน ผู้เขียนขอแนะนำให้ผู้อ่านทดลองเล่นกับฐานข้อมูลที่ได้ติดตั้งไว้อีกเล็กน้อยก่อนที่จะไปยังบทต่อไป ลองเพิ่มอีกหลาย ๆ เอกสาร หรือถ้าเป็นไปได้ให้เพิ่มลงในคอลเลกชันใหม่ และทำความคุ้นเคยกับตัวช่วยเลือกต่าง ๆ รวมถึงลองใช้คำสั่ง `find` `count` และ `remove` หลังจากได้ลองทำสิ่งเหล่านี้สักสองถึงสามครั้งแล้ว สิ่งต่าง ๆ ที่อาจดูแปลกในช่วงแรกก็น่าจะดูเข้าที่เข้าทางมากขึ้น
 
 # Chapter 2 - Updating #
 In chapter 1 we introduced three of the four CRUD (create, read, update and delete) operations. This chapter is dedicated to the one we skipped over: `update`. `Update` has a few surprising behaviors, which is why we dedicate a chapter to it.
