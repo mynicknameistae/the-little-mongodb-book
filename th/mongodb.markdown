@@ -256,7 +256,7 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 
 	db.unicorns.find({name: 'Roooooodles'})
 
-ผู้อ่านน่าจะพบสิ่งที่น่าแปลกใจสิ่งแรกเกี่ยวกับการ `update` แล้ว เนื่องจากคำสั่งนี้จะไม่พบเอกสารตามชื่อที่ระบุ เนื่องจากค่าพารามิเตอร์ที่สองที่เราป้อนไปนั้นไม่ได้ระบุตัวดำเนินการใด ๆ ไว้ ดังนั้นคำสั่งนี้จึงเป็นการ **แทนที่** เอกสารต้นฉบับ หรือกล่าวอีกนัยหนึ่งคือคำสั่ง `update` พบเอกสารตามฟิลด์ `name` ที่กำหนด แล้วจึงแทนที่เอกสารท้งหมดนั้นด้วยเอกสารใหม่ (ค่าที่ระบุในพารามิเตอร์ที่สอง) การทำงานในลักษณะเช่นเดียวกันนี้ไม่มีอยู่ในคำสั่ง `update` ของ SQL ซึ่งรูปแบบเช่นนี้อาจช่วยอำนวยความสะดวกได้เป็นอย่างยิ่งกับการอัพเดตข้อมูลในบางสถานการณ์ อย่างไรก็ตาม หากต้องการเปลี่ยนแปลงข้อมูลในหนึ่งหรือเพียงไม่กี่ฟิลด์แล้วนั้น จะต้องใช้ตัวดำเนินการ `$set` ของ MongoDB ซึ่งเราจะใช้คำสั่งนี้เพื่ออัพเดตข้อมูลในฟิลด์ต่าง ๆ ที่หายไปของเรา:
+ผู้อ่านน่าจะพบเรื่องน่าแปลกใจเรื่องแรกเกี่ยวกับการ `update` แล้ว เนื่องจากคำสั่งนี้จะไม่พบเอกสารตามชื่อที่ระบุ เพราะค่าพารามิเตอร์ที่สองที่เราป้อนไปนั้นไม่ได้ระบุตัวดำเนินการใด ๆ ไว้ ดังนั้นคำสั่งนี้จึงเป็นการ **แทนที่** เอกสารต้นฉบับ หรือกล่าวอีกนัยหนึ่งคือคำสั่ง `update` พบเอกสารตามฟิลด์ `name` ที่กำหนด แล้วจึงแทนที่เอกสารท้งหมดนั้นด้วยเอกสารใหม่ (ค่าที่ระบุในพารามิเตอร์ที่สอง) การทำงานในลักษณะเช่นเดียวกันนี้ไม่มีอยู่ในคำสั่ง `update` ของ SQL ซึ่งรูปแบบเช่นนี้อาจช่วยอำนวยความสะดวกได้เป็นอย่างยิ่งกับการอัพเดตข้อมูลในบางสถานการณ์ อย่างไรก็ตาม หากต้องการเปลี่ยนแปลงข้อมูลในหนึ่งหรือเพียงไม่กี่ฟิลด์แล้วนั้น จะต้องใช้ตัวดำเนินการ `$set` ของ MongoDB ซึ่งเราจะใช้คำสั่งนี้เพื่ออัพเดตข้อมูลในฟิลด์ต่าง ๆ ที่หายไปของเรา:
 
 	db.unicorns.update({weight: 590}, {$set: {
 		name: 'Roooooodles',
@@ -287,22 +287,22 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 
 ผู้อ่านสามารถดูรายละเอียดเพิ่มเติมเกี่ยวกับตัวดำเนินการในการอัพเดตอื่น ๆ ได้ที่ส่วนของ [ตัวดำเนินการอัพเดต (Update Operators)](http://docs.mongodb.org/manual/reference/operator/update/#update-operators) ในคู่มือของ MongoDB
 
-## Upserts ##
-One of the more pleasant surprises of using `update` is that it fully supports `upserts`. An `upsert` updates the document if found or inserts it if not. Upserts are handy to have in certain situations and when you run into one, you'll know it. To enable upserting we pass a third parameter to update `{upsert:true}`.
+## อัพเสิร์ต (Upsert) ##
+อีกหนึ่งเรื่องน่าแปลกใจที่มีประโยชน์อย่างยิ่งในการใช้ `update` คือการรองรับการ `อัพเสิร์ต (upsert)` อย่างเต็มรูปแบบ การ `upsert` จะอัพเดตเอกสารหากพบว่ามีเอกสารนั้นอยู่แล้ว และจะเพิ่มให้ทันทีหากยังไม่มีเอกสารนั้น ๆ  การอัพเสิร์ตเช่นนี้ช่วยอำนวยความสะดวกได้เป็นอย่างยิ่งในหลายสถานการณ์ ซึ่งผู้อ่านจะทราบได้ทันทีเมื่อต้องเผชิญสถานการณ์เช่นนี้ เราสามารถเปิดใช้การอัพเสิร์ตได้โดยส่งผ่านพารามิเตอร์ `{upsert:true}` เป็นค่าที่สามไปพร้อมกับคำสั่งขณะอัพเดต
 
-A mundane example is a hit counter for a website. If we wanted to keep an aggregate count in real time, we'd have to see if the record already existed for the page, and based on that decide to run an update or insert. With the upsert option omitted (or set to false), executing the following won't do anything:
+ตัวนับการเข้าชมเว็บไซต์แสดงการนำลักษณะเช่นนี้ไปใช้งานจริงได้เป็นอย่างดี หากเราต้องการรวบรวมจำนวนนับแบบเรียลไทม์นั้น เราต้องตรวจสอบว่ามีข้อมูลสำหรับหน้านั้น ๆ อยู่แล้วหรือไม่ และใช้ข้อมูลดังกล่าวเพื่อตัดสินใจว่าจะทำการอัพเดตข้อมูลที่มีอยู่แล้วหรือเพิ่มเรคคอร์ดสำหรับหน้านั้นขึ้นมาใหม่ หากไม่ได้กำหนดตัวเลือกอัพเสิร์ต (หรือกำหนดให้เป็นเท็จ) การประมวลผลต่อไปนี้จะไม่มีผลแต่อย่างใด:
 
 	db.hits.update({page: 'unicorns'},
 		{$inc: {hits: 1}});
 	db.hits.find();
 
-However, if we add the upsert option, the results are quite different:
+อย่างไรก็ตาม หากเปิดใช้ตัวเลือกอัพเสิร์ตแล้ว ผลที่ได้จะแตกต่างออกไป:
 
 	db.hits.update({page: 'unicorns'},
 		{$inc: {hits: 1}}, {upsert:true});
 	db.hits.find();
 
-Since no documents exists with a field `page` equal to `unicorns`, a new document is inserted. If we execute it a second time, the existing document is updated and `hits` is incremented to 2.
+เนื่องจากยังไม่มีเอกสารใดที่ค่าในฟิลด์ `page` เป็น `unicorns` ดังนั้น เอกสารใหม่จึงถูกเพิ่มเข้าไป หากเรารันคำสั่งนี้เป็นครั้งที่สอง เอกสารนี้ก็จะถูกอัพเดตให้ `hits` มีค่าเพิ่มขึ้นเป็น 2
 
 	db.hits.update({page: 'unicorns'},
 		{$inc: {hits: 1}}, {upsert:true});
