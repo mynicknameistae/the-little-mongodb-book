@@ -241,22 +241,22 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 ## ในบทนี้ ##
 แม้ว่าเรายังไม่ได้ดูรายละเอียดเกี่ยวกับคำสั่ง `update` หรือความสามารถเด่น ๆ ที่เราสามารถทำได้ด้วย `find` อย่างไรก็ตาม เราได้เริ่มใช้งาน MongoDB ได้ลองใช้คำสั่ง `insert` และ `remove` เพื่อเพิ่มและลบข้อมูล (ซึ่งไม่ได้มีอะไรมากไปกว่าที่เราได้ลองใช้ไปแล้วนัก) เราได้เริ่มใช้ `find` เพื่อค้นหาข้อมูล และได้รู้ว่า `ตัวช่วยเลือก (selectors)` ของ MongoDB นั้นคืออะไร ในตอนนี้ เราได้วางรากฐานสำหรับสิ่งต่าง ๆ ที่จะเรียนรู้กันต่อไปได้อย่างเข้มแข็ง เชื่อหรือไม่ว่าขณะนี้ผู้อ่านได้เรียนรู้ส่วนใหญ่ของสิ่งที่จำเป็นต่อการเริ่มใช้ MongoDB ไปเรียบร้อยแล้ว - นั่นเป็นเพราะ MongoDB ถูกสร้างให้ง่ายต่อการเรียนรู้และใช้งาน ผู้เขียนขอแนะนำให้ผู้อ่านทดลองเล่นกับฐานข้อมูลที่ได้ติดตั้งไว้อีกเล็กน้อยก่อนที่จะไปยังบทต่อไป ลองเพิ่มอีกหลาย ๆ เอกสาร หรือถ้าเป็นไปได้ให้เพิ่มลงในคอลเลกชันใหม่ และทำความคุ้นเคยกับตัวช่วยเลือกต่าง ๆ รวมถึงลองใช้คำสั่ง `find` `count` และ `remove` หลังจากได้ลองทำสิ่งเหล่านี้สักสองถึงสามครั้งแล้ว สิ่งต่าง ๆ ที่อาจดูแปลกในช่วงแรกก็น่าจะดูเข้าที่เข้าทางมากขึ้น
 
-# Chapter 2 - Updating #
-In chapter 1 we introduced three of the four CRUD (create, read, update and delete) operations. This chapter is dedicated to the one we skipped over: `update`. `Update` has a few surprising behaviors, which is why we dedicate a chapter to it.
+# บทที่ 2 - การอัพเดต #
+เราได้ทำความคุ้นเคยกับองค์ประกอบสามในสี่ด้านของ CRUD - Create (สร้าง) Read (อ่าน) Update (อัพเดต) และ Delete (ลบ) กันในบทที่ 1 มาแล้ว ในบททนี้ เราจะมากล่าวถึงด้านที่เราข้ามไปคือ: `อัพเดต (update)` แต่เนื่องจากการ `update` มีพฤติกรรมบางอย่างที่อาจดูน่าแปลกใจ เราจึงแยกออกมาเป็นอีกหนึ่งบทโดยเฉพาะ
 
-## Update: Replace Versus $set ##
-In its simplest form, `update` takes two parameters: the selector (where) to use and what updates to apply to fields. If Roooooodles had gained a bit of weight, you might expect that we should execute:
+## อัพเดต: จะแทนที่หรือจะ $set ##
+โดยพื้นฐานแล้วการ `update` ต้องการสองพารามิเตอร์: ตัวช่วยเลือก (where) ที่จะใช้ค้นหา กับสิ่งที่ต้องการอัพเดตให้กับฟิลด์ต่าง ๆ ตัวอย่างเช่น หากยูนิคอร์นชื่อ Roooooodles น้ำหนึกขึ้นมาเล็กน้อย ผู้อ่านอาจคาดว่าเราควรสั่งประมวลผลดังนี้:
 
 	db.unicorns.update({name: 'Roooooodles'},
 		{weight: 590})
 
-(If you've played with your `unicorns` collection and it doesn't have the original data anymore, go ahead and `remove` all documents and re-insert from the code in chapter 1.)
+(หากคุณได้ลองเล่นกับคอลเลกชัน `unicorns` จนไม่มีข้อมูลดั้งเดิมเหลืออยู่แล้ว โปรดสั่ง `remove` เพื่อลบเอกสารทั้งหมด แล้วใช้โค้ดในบทที่ 1 เพื่อเพิ่มเอกสารต่าง ๆ กลับเข้าไปอีกครั้ง)
 
-Now, if we look at the updated record:
+ในตอนนี้ หากเราลองเรียกดูเรคอร์ดที่ถูกอัพเดตแล้ว:
 
 	db.unicorns.find({name: 'Roooooodles'})
 
-You should discover the first surprise of `update`. No document is found because the second parameter we supplied didn't have any update operators, and therefore it was used to **replace** the original document. In other words, the `update` found a document by `name` and replaced the entire document with the new document (the second parameter). There is no equivalent functionality to this in SQL's `update` command. In some situations, this is ideal and can be leveraged for some truly dynamic updates. However, when you want to change the value of one, or a few fields, you must use MongoDB's `$set` operator. Go ahead and run this update to reset the lost fields:
+ผู้อ่านน่าจะพบสิ่งที่น่าแปลกใจสิ่งแรกเกี่ยวกับการ `update` แล้ว เนื่องจากคำสั่งนี้จะไม่พบเอกสารตามชื่อที่ระบุ เนื่องจากค่าพารามิเตอร์ที่สองที่เราป้อนไปนั้นไม่ได้ระบุตัวดำเนินการใด ๆ ไว้ ดังนั้นคำสั่งนี้จึงเป็นการ **แทนที่** เอกสารต้นฉบับ หรือกล่าวอีกนัยหนึ่งคือคำสั่ง `update` พบเอกสารตามฟิลด์ `name` ที่กำหนด แล้วจึงแทนที่เอกสารท้งหมดนั้นด้วยเอกสารใหม่ (ค่าที่ระบุในพารามิเตอร์ที่สอง) การทำงานในลักษณะเช่นเดียวกันนี้ไม่มีอยู่ในคำสั่ง `update` ของ SQL ซึ่งรูปแบบเช่นนี้อาจช่วยอำนวยความสะดวกได้เป็นอย่างยิ่งกับการอัพเดตข้อมูลในบางสถานการณ์ อย่างไรก็ตาม หากต้องการเปลี่ยนแปลงข้อมูลในหนึ่งหรือเพียงไม่กี่ฟิลด์แล้วนั้น จะต้องใช้ตัวดำเนินการ `$set` ของ MongoDB ซึ่งเราจะใช้คำสั่งนี้เพื่ออัพเดตข้อมูลในฟิลด์ต่าง ๆ ที่หายไปของเรา:
 
 	db.unicorns.update({weight: 590}, {$set: {
 		name: 'Roooooodles',
@@ -265,27 +265,27 @@ You should discover the first surprise of `update`. No document is found because
 		gender: 'm',
 		vampires: 99}})
 
-This won't overwrite the new `weight` since we didn't specify it. Now if we execute:
+คำสั่งข้างต้นจะไม่เปลี่ยนแปลงฟิลด์ `weight` เนื่องจากไม่ได้ระบุค่าไว้ ในตอนนี้ หากเราสั่ง:
 
 	db.unicorns.find({name: 'Roooooodles'})
 
-We get the expected result. Therefore, the correct way to have updated the weight in the first place is:
+เราจะได้ผลลัพธ์ตามที่คาดหมายไว้ ดังนั้น หากเราต้องการอัพเดตน้ำหนักให้ถูกต้องตามที่ต้องการตั้งแต่แรกนั้นจะต้องใช้คำสั่งดังนี้:
 
 	db.unicorns.update({name: 'Roooooodles'},
 		{$set: {weight: 590}})
 
-## Update Operators ##
-In addition to `$set`, we can leverage other operators to do some nifty things. All update operators work on fields - so your entire document won't be wiped out. For example, the `$inc` operator is used to increment a field by a certain positive or negative amount. If Pilot was incorrectly awarded a couple vampire kills, we could correct the mistake by executing:
+## ตัวดำเนินการในการอัพเดต ##
+นอกเหนือจาก `$set` แล้ว เรายังสามารถใช้ตัวดำเนินการอื่น ๆ สำหรับงานที่แตกต่างกันไป เนื่องจากตัวดำเนินการอัพเดตทั้งหมดทำงานในระดับฟิลด์ - จึงไม่ต้องกังวัลว่าตัวเอกสารจะถูกลบไป ตัวอย่างการใช้งานเช่นในกรณีที่เราบันทึกข้อมูลจำนวนแวมไพร์ที่ถูกจัดการไปโดยยูนิคอร์นที่ชื่อ Pilot ไว้ไม่ถูกต้อง ก็สามารถใช้ตัวดำเนินการ `$inc` ที่ใช้เพื่อนำค่าบวกหรือค่าลบมาบวกเข้ากับฟิลด์ต่าง ๆ มาแก้ไขได้ดังนี้:
 
 	db.unicorns.update({name: 'Pilot'},
 		{$inc: {vampires: -2}})
 
-If Aurora suddenly developed a sweet tooth, we could add a value to her `loves` field via the `$push` operator:
+หากอยู่มาวันหนึ่ง Aurora เกิดชอบของหวานขึ้นมา เราก็สามารถเพิ่มค่าดังกล่าวเข้าไปในฟิลด์ `loves` โดยใช้ตัวดำเนินการ `$push` ได้ดังนี้:
 
 	db.unicorns.update({name: 'Aurora'},
 		{$push: {loves: 'sugar'}})
 
-The [Update Operators](http://docs.mongodb.org/manual/reference/operator/update/#update-operators) section of the MongoDB manual has more information on the other available update operators.
+ผู้อ่านสามารถดูรายละเอียดเพิ่มเติมเกี่ยวกับตัวดำเนินการในการอัพเดตอื่น ๆ ได้ที่ส่วนของ [ตัวดำเนินการอัพเดต (Update Operators)](http://docs.mongodb.org/manual/reference/operator/update/#update-operators) ในคู่มือของ MongoDB
 
 ## Upserts ##
 One of the more pleasant surprises of using `update` is that it fully supports `upserts`. An `upsert` updates the document if found or inserts it if not. Upserts are handy to have in certain situations and when you run into one, you'll know it. To enable upserting we pass a third parameter to update `{upsert:true}`.
