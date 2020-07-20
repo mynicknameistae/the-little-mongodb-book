@@ -308,22 +308,22 @@ This version was updated for MongoDB 2.6 by Asya Kamsky.  The latest source of t
 		{$inc: {hits: 1}}, {upsert:true});
 	db.hits.find();
 
-## Multiple Updates ##
-The final surprise `update` has to offer is that, by default, it'll update a single document. So far, for the examples we've looked at, this might seem logical. However, if you executed something like:
+## การอัพเดตหลายรายการ ##
+เรื่องน่าแปลกใจประการสุดท้ายของ `update` คือโดยค่าตั้งต้นแล้วจะทำการอัพเดตเอกสารเพียงรายการเดียวเท่านั้น หากพิจารณาเฉพาะจากตัวอย่างที่ผ่านมาทุกอย่างอาจยังดูสมเหตุสมผล อย่างไรก็ตาม หากใช้คำสั่งดังนี้แล้ว:
 
 	db.unicorns.update({},
 		{$set: {vaccinated: true }});
 	db.unicorns.find({vaccinated: true});
 
-You might expect to find all of your precious unicorns to be vaccinated. To get the behavior you desire, the `multi` option must be set to true:
+เราอาจคาดว่ายูนิคอร์นทั้งหมดของเราจะถูกกำหนดค่าว่าได้รับการฉีดวัคซีนแล้ว (vaccinated) แต่ถ้าต้องการให้ได้ผลดังที่คาดหวังไว้นั้น ตัวเลือก `multi` ต้องถูกกำหนดให้เป็นจริงด้วย:
 
 	db.unicorns.update({},
 		{$set: {vaccinated: true }},
 		{multi:true});
 	db.unicorns.find({vaccinated: true});
 
-## In This Chapter ##
-This chapter concluded our introduction to the basic CRUD operations available against a collection. We looked at `update` in detail and observed three interesting behaviors. First, if you pass it a document without update operators, MongoDB's `update` will replace the existing document. Because of this, normally you will use the `$set` operator (or one of the many other available operators that modify the document). Secondly, `update` supports an intuitive `upsert` option which is particularly useful when you don't know if the document already exists. Finally, by default, `update` updates only the first matching document, so use the `multi` option when you want to update all matching documents.
+## ในบทนี้ ##
+ในบทนี้ เราได้สรุปปิดท้ายการทำความรู้จักกระบวนการ CRUD เบื้องต้นที่ดำเนินการกับคอลเลกชัน เราได้ศึกษารายละเอียดเกี่ยวกับการ `update` พร้อมทั้งได้สังเกตพฤติกรรมสามประการที่น่าแปลกใจ ประการแรกคือหากส่งผ่านเอกสารเข้าไปโดยไม่ระบุตัวดำเนินการในการอัดเดตแล้ว การ `update` ของ MongoDB จะแทนที่เอกสารดังกล่าว ด้วยเหตุผลนี้ โดยปกติแล้วเราจึงต้องใช้ตัวดำเนินการ `$set` (หรือตัวดำเนินการอื่น ๆ ที่ใช้เพื่อแก้ไขเอกสาร) ร่วมด้วยเสมอ ประการที่สอง การ `update` รองรับตัวเลือก `upsert` ซึ่งมีประโยชน์อย่างยิ่งในกรณีที่เราไม่ทราบว่ามีเอกสารเดิมอยู่แล้วหรือไม่ และท้ายที่สุด การ `update` จะดำเนินการกับเอกสารแรกที่ตรงตามเงื่อนไขที่กำหนดเท่านั้น หากต้องการดำเนินการกับเอกสารทั้งหมดที่ตรงตามเงื่อนไข ก็ต้องระบุตัวเลือก `multi` ด้วย
 
 # Chapter 3 - Mastering Find #
 Chapter 1 provided a superficial look at the `find` command. There's more to `find` than understanding `selectors` though. We already mentioned that the result from `find` is a `cursor`. We'll now look at exactly what this means in more detail.
