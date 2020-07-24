@@ -370,15 +370,15 @@ MongoDB สามารถใช้ดัชนี (index) สำหรับก
 		.count()
 
 ## ในบทนี้ ##
-การค้นหาโดยใช้ `find` และ `cursors` มีรูปแบบที่ตรงไปตรงมา นอกจากคำสั่งที่ได้กล่าวมาแล้ว ยังมีคำสั่งอื่น ๆ ที่อาจกล่าวถึงในบทต่อ ๆ ไปหรืออาจนำมาใช้ในกรณีพิเศษต่าง ๆ เท่านั้น แต่ในตอนนี้ ผู้อ่านน่าจะสามารถใช้งานเชลล์ของ mongo รวมถึงเข้าใจหลักการพื้นฐานของ MongoDB ได้อย่างครอบคลุมแล้ว
+การค้นหาโดยใช้ `find` และ `cursors` มีรูปแบบที่ตรงไปตรงมา นอกจากคำสั่งที่ได้กล่าวมาแล้ว ยังมีคำสั่งอื่น ๆ ที่อาจกล่าวถึงในบทต่อ ๆ ไปหรืออาจนำมาใช้ในกรณีพิเศษต่าง ๆ เท่านั้น แต่ในตอนนี้ ผู้อ่านน่าจะสร้างความคุ้นเคยในการใช้งานเชลล์ของ mongo รวมถึงเข้าใจหลักการพื้นฐานของ MongoDB ได้เป็นอย่างดีแล้ว
 
-# Chapter 4 - Data Modeling #
-Let's shift gears and have a more abstract conversation about MongoDB. Explaining a few new terms and some new syntax is a trivial task. Having a conversation about modeling with a new paradigm isn't as easy. The truth is that most of us are still finding out what works and what doesn't when it comes to modeling with these new technologies. It's a conversation we can start having, but ultimately you'll have to practice and learn on real code.
+# บทที่ 4 - การออกแบบข้อมูล (Data Modeling) #
+เราลองมาเปลี่ยนมุมมองและกล่าวถึงด้านที่เป็นนามธรรมเกี่ยวกับ MongoDB กันบ้าง การอธิบายเกี่ยวกับคำใหม่ ๆ และวากยสัมพันธ์ใหม่ ๆ เป็นเรื่องที่ตรงไปตรงมา แต่การกล่าวถึงการออกแบบที่ใช้กรอบแนวคิด (paradigm) แบบใหม่อาจไม่ง่ายเช่นนั้น อันที่จริงพวกเราส่วนใหญ่ยังอยู่ระหว่างการพยายามค้นหาว่าอะไรบ้างที่ใช้ได้หรือใช้ไม่ได้กับเทคโนโลยีใหม่ ๆ เช่นนี้ นี่คือประเด็นที่เราสามารถเริ่มบทสนทนากันได้ แต่ท้ายที่สุดแล้ว ผู้อ่านจะต้องทดลองและเรียนรู้จากการเขียนโค้ดขึ้นมาจริง ๆ
 
-Out of all NoSQL databases, document-oriented databases are probably the most similar to relational databases - at least when it comes to modeling. However, the differences that exist are important.
+จากฐานข้อมูลชนิด NoSQL ต่าง ๆ นั้น ฐานข้อมูลที่มีพื้นฐานบนเอกสารดูจะมีความคล้ายคลึงกับฐานข้อมูลเชิงสัมพันธ์มากที่สุดแล้ว - อย่างน้อยเมื่อพิจารณาด้านการออกแบบข้อมูล อย่างไรก็ตาม ด้านที่แตกต่างกันก็มีความสำคัญไม่แพ้กัน
 
-## No Joins ##
-The first and most fundamental difference that you'll need to get comfortable with is MongoDB's lack of joins. I don't know the specific reason why some type of join syntax isn't supported in MongoDB, but I do know that joins are generally seen as non-scalable. That is, once you start to split your data horizontally, you end up performing your joins on the client (the application server) anyway. Regardless of the reasons, the fact remains that data *is* relational, and MongoDB doesn't support joins.
+## ไม่มีการเชื่อมตาราง (Join) ##
+ความแตกต่างประการแรกและเป็นหลักการพื้นฐานสำคัญที่ผู้อ่านต้องทำความคุ้นเคยคือการที่ MongoDB ไม่มีการเชื่อมตาราง (join) ผู้เขียนเองก็ไม่ทราบว่าเหตุใด MongoDB จึงไม่สนับสนุนการเชื่อมตารางไม่ว่าในรูปแบบใด ๆ แต่ผู้เขียนเข้าใจดีว่าการเชื่อมตารางนั้นถูกมองว่าไม่สามารถปรับเปลี่ยนขนาดได้ (non-scalable) นั่นคือหากเราเริ่มแบ่งข้อมูลออกตามแนวนอนแล้ว ในที่สุดก็ต้องทำการเชื่อมโยงข้อมูลทางฝั่งไคลเอนต์ (แอปพลิเคชันเซอร์ฟเวอร์) อยู่ดี ดังน้้น ไม่ว่าจะเป็นด้วยสาเหตุประการใด แต่ข้อเท็จจริงก็คือตัวข้อมูลนั้น*สัมพันธ์*กัน แต่ MongoDB ไม่รองรับการเชื่อมตารางหรือ join
 
 Without knowing anything else, to live in a join-less world, we have to do joins ourselves within our application's code. Essentially we need to issue a second query to `find` the relevant data in a second collection. Setting our data up isn't any different than declaring a foreign key in a relational database. Let's give a little less focus to our beautiful `unicorns` and a bit more time to our `employees`. The first thing we'll do is create an employee (I'm providing an explicit `_id` so that we can build coherent examples)
 
