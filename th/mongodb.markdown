@@ -380,13 +380,13 @@ MongoDB สามารถใช้ดัชนี (index) สำหรับก
 ## ไม่มีการเชื่อมตาราง (Join) ##
 ความแตกต่างประการแรกและเป็นหลักการพื้นฐานสำคัญที่ผู้อ่านต้องทำความคุ้นเคยคือการที่ MongoDB ไม่มีการเชื่อมตาราง (join) ผู้เขียนเองก็ไม่ทราบว่าเหตุใด MongoDB จึงไม่สนับสนุนการเชื่อมตารางไม่ว่าในรูปแบบใด ๆ แต่ผู้เขียนเข้าใจดีว่าการเชื่อมตารางนั้นถูกมองว่าไม่สามารถปรับเปลี่ยนขนาดได้ (non-scalable) นั่นคือหากเราเริ่มแบ่งข้อมูลออกตามแนวนอนแล้ว ในที่สุดก็ต้องทำการเชื่อมโยงข้อมูลทางฝั่งไคลเอนต์ (แอปพลิเคชันเซอร์ฟเวอร์) อยู่ดี ดังน้้น ไม่ว่าจะเป็นด้วยสาเหตุประการใด แต่ข้อเท็จจริงก็คือตัวข้อมูลนั้น*สัมพันธ์*กัน แต่ MongoDB ไม่รองรับการเชื่อมตารางหรือ join
 
-Without knowing anything else, to live in a join-less world, we have to do joins ourselves within our application's code. Essentially we need to issue a second query to `find` the relevant data in a second collection. Setting our data up isn't any different than declaring a foreign key in a relational database. Let's give a little less focus to our beautiful `unicorns` and a bit more time to our `employees`. The first thing we'll do is create an employee (I'm providing an explicit `_id` so that we can build coherent examples)
+ในโลกที่ไร้การเชื่อมตารางเช่นนี้ หากไม่ทราบวิธีการอื่นใด เราจำเป็นต้องทำการเชื่อมตารางด้วยตนเองภายในโค้ดของแอปพลิเคชัน โดยหลักคือเราต้องสั่งคิวรีที่สองเพื่อค้นหา (`find`) ช้อมูลที่สัมพันธ์กันในอีกหนึ่งคอลเลกชัน การจัดเตรียมข้อมูลของเราก็ไม่ได้แตกต่างไปจากการประกาศคีย์นอก (foreign key) ในฐานข้อมูลเชิงสัมพันธ์ ในตอนนี้เราลองวางมือจากเหล่า `unicorns` แสนสวยของเราสักพัก เพื่อไปให้เวลากับพนักงาน (`employees`) ของเรา สิ่งแรกที่เราต้องทำคือการสร้างพนักงาน (employee) ขึ้นมาหนึ่งราย (ในที่นี้ ผู้เขียนได้กำหนด `_id` ขึ้นมาโดยตรง เพื่อให้สามารถสร้างตัวอย่างที่สอดคล้องกันได้)
 
 	db.employees.insert({_id: ObjectId(
 		"4d85c7039ab0fd70a117d730"),
 		name: 'Leto'})
 
-Now let's add a couple employees and set their manager as `Leto`:
+ทีนี้ ลองเพิ่มพนักงานอีกสองรายและกำหนดให้ทั้งสองมี `Leto` เป็นผู้จัดการ (manager):
 
 	db.employees.insert({_id: ObjectId(
 		"4d85c7039ab0fd70a117d731"),
@@ -400,17 +400,17 @@ Now let's add a couple employees and set their manager as `Leto`:
 		"4d85c7039ab0fd70a117d730")});
 
 
-(It's worth repeating that the `_id` can be any unique value. Since you'd likely use an `ObjectId` in real life, we'll use them here as well.)
+(ขอย้ำอีกครั้งว่า `_id` สามารถเป็นค่าใด ๆ ก็ได้ที่ไม่ซ้ำกัน แต่เนื่องจากเรามักใช้ `ObjectId` ในการทำงานจริง ดังนั้นเราจึงนำมาใช้ในที่นี้)
 
-Of course, to find all of Leto's employees, one simply executes:
+แน่นอนว่าหากต้องการค้นหาพนักงานทั้งหมดของ Leto ก็สามารถทำได้ง่าย ๆ ด้วยคำสั่งดังนี้:
 
 	db.employees.find({manager: ObjectId(
 		"4d85c7039ab0fd70a117d730")})
 
-There's nothing magical here. In the worst cases, most of the time, the lack of join will merely require an extra query (likely indexed).
+การทำงานเช่นนี้ไม่มีกลไกพิเศษแต่อย่างใด และโดยส่วนใหญ่แล้ว ในกรณีที่เลวร้ายที่สุดก็เพียงต้องคิวรีข้อมูลเพิ่มอีกหนึ่งครั้ง (ควรมีการทำดัชนี้ไว้) เมื่อไม่สามารถเชื่อมตารางได้
 
-## Arrays and Embedded Documents ##
-Just because MongoDB doesn't have joins doesn't mean it doesn't have a few tricks up its sleeve. Remember when we saw that MongoDB supports arrays as first class objects of a document? It turns out that this is incredibly handy when dealing with many-to-one or many-to-many relationships. As a simple example, if an employee could have two managers, we could simply store these in an array:
+## อาเรย์และการฝังเอกสาร ##
+แม้ว่า MongoDB ไม่มีการ join ก็ไม่ได้หมายความว่าจะไม่มีกลเม็ดเด็ดพรายใด ๆ ซ่อนไว้ ยังจำเมื่อครั้งที่เราพบว่า MongoDB รองรับอาร์เรย์เป็นออบเจกต์พื้นฐานในเอกสารได้หรือไม่? กลายเป็นว่านี่คือสิ่งที่เป็นประโยชน์อย่างยิ่งเมื่อต้องทำงานกับความสัมพันธ์แบบ many-to-one หรือ many-to-many ตัวอย่างเช่นหากพนักงานคนหนึ่งมีผู้จัดการสองคนก็สามารถจัดเก็บในรูปแบบอาร์เรย์ได้ดังนี้:
 
 	db.employees.insert({_id: ObjectId(
 		"4d85c7039ab0fd70a117d733"),
@@ -420,14 +420,14 @@ Just because MongoDB doesn't have joins doesn't mean it doesn't have a few trick
 		ObjectId(
 		"4d85c7039ab0fd70a117d732")] })
 
-Of particular interest is that, for some documents, `manager` can be a scalar value, while for others it can be an array. Our original `find` query will work for both:
+ที่น่าสนใจคือในบางเอกสาร `manager` สามารถเป็นค่าเดี่ยว ๆ ขณะที่ในเอกสารอื่นก็สามารถมีค่าเป็นอาร์เรย์ได้ และการค้นหาด้วย `find` ดังที่เคยกระทำก่อนหน้านี้ก็ทำงานได้กับทั้งสองรูปแบบ:
 
 	db.employees.find({manager: ObjectId(
 		"4d85c7039ab0fd70a117d730")})
 
-You'll quickly find that arrays of values are much more convenient to deal with than many-to-many join-tables.
+แล้วคุณจะพบว่าการทำงานกับอาร์เรย์ของค่าต่าง ๆ เช่นนี้สะดวกกว่าการ join ตารางในแบบ many-to-many มาก
 
-Besides arrays, MongoDB also supports embedded documents. Go ahead and try inserting a document with a nested document, such as:
+นอกจากอาร์เรย์แล้ว MongoDB ยังรองรับเอกสารแบบฝังตัวอีกด้วย ลองเพิ่มเอกสารที่มีอีกเอกสารหนึ่งซ้อนอยู่ด้านในดังตัวอย่างนี้:
 
 	db.employees.insert({_id: ObjectId(
 		"4d85c7039ab0fd70a117d734"),
@@ -437,14 +437,14 @@ Besides arrays, MongoDB also supports embedded documents. Go ahead and try inser
 			brother: ObjectId(
 		"4d85c7039ab0fd70a117d730")}})
 
-In case you are wondering, embedded documents can be queried using a dot-notation:
+ในกรณีที่คุณอาจสงสัย เอกสารที่ฝังตัวกันอยู่ก็สามารถเรียกใช้ได้ด้วยการอ้างถึงโดยใช้จุด ดังนี้:
 
 	db.employees.find({
 		'family.mother': 'Chani'})
 
-We'll briefly talk about where embedded documents fit and how you should use them.
+เราจะกล่าวถึงกรณีที่เหมาะกับการใช้เอกสารฝังตัวเช่นนี้และวิธีการใช้งานที่เหมาะสมในลำดับต่อไป
 
-Combining the two concepts, we can even embed arrays of documents:
+เมื่อนำหลักการข้างต้นทั้งสองมารวมกัน เราก็สามารถฝังเอกสารไว้ในอาร์เรย์ได้อีกด้วย:
 
 	db.employees.insert({_id: ObjectId(
 		"4d85c7039ab0fd70a117d735"),
@@ -461,7 +461,7 @@ For example, say you are writing a forum application. The traditional way to ass
 
 Adjusting to this kind of approach won't come easy to some. In a lot of cases it won't even make sense to do this. Don't be afraid to experiment with this approach though. It's not only suitable in some circumstances, but it can also be the best way to do it.
 
-## Which Should You Choose? ##
+## แล้วเราควรเลือกใช้แบบใด? ##
 Arrays of ids can be a useful strategy when dealing with one-to-many or many-to-many scenarios. But more commonly, new developers are left deciding between using embedded documents versus doing "manual" referencing.
 
 First, you should know that an individual document is currently limited to 16 megabytes in size. Knowing that documents have a size limit, though quite generous, gives you some idea of how they are intended to be used. At this point, it seems like most developers lean heavily on manual references for most of their relationships. Embedded documents are frequently leveraged, but mostly for smaller pieces of data which we want to always pull with the parent document. A real world example may be to store an `addresses` documents with each user, something like:
@@ -482,7 +482,7 @@ The conversation gets even more interesting when you consider embedded documents
 
 There's no hard rule (well, aside from 16MB). Play with different approaches and you'll get a sense of what does and does not feel right.
 
-## In This Chapter ##
+## ในบทนี้ ##
 Our goal in this chapter was to provide some helpful guidelines for modeling your data in MongoDB, a starting point, if you will. Modeling in a document-oriented system is different, but not too different, than in a relational world. You have more flexibility and one constraint, but for a new system, things tend to fit quite nicely. The only way you can go wrong is by not trying.
 
 # Chapter 5 - When To Use MongoDB #
